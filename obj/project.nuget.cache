@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "dgSpecHash": "BMWK/Fcu0gY=",
+  "success": true,
+  "projectFilePath": "/Users/bmo/Desktop/programacion/programacionMine/5-microsoft-backend/5-ASPNET/14-api/14-api.csproj",
+  "expectedPackageFiles": [
+    "/Users/bmo/.nuget/packages/microsoft.extensions.apidescription.server/10.0.0/microsoft.extensions.apidescription.server.10.0.0.nupkg.sha512",
+    "/Users/bmo/.nuget/packages/microsoft.openapi/2.4.1/microsoft.openapi.2.4.1.nupkg.sha512",
+    "/Users/bmo/.nuget/packages/swashbuckle.aspnetcore/10.1.3/swashbuckle.aspnetcore.10.1.3.nupkg.sha512",
+    "/Users/bmo/.nuget/packages/swashbuckle.aspnetcore.swagger/10.1.3/swashbuckle.aspnetcore.swagger.10.1.3.nupkg.sha512",
+    "/Users/bmo/.nuget/packages/swashbuckle.aspnetcore.swaggergen/10.1.3/swashbuckle.aspnetcore.swaggergen.10.1.3.nupkg.sha512",
+    "/Users/bmo/.nuget/packages/swashbuckle.aspnetcore.swaggerui/10.1.3/swashbuckle.aspnetcore.swaggerui.10.1.3.nupkg.sha512"
+  ],
+  "logs": []
+}
