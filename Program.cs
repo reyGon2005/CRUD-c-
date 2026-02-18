@@ -8,27 +8,27 @@ using System;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// 1. Agregamos los servicios necesarios para Swagger
+// 1. Add services required for Swagger
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-// Lista en memoria que funcionará como nuestra "Base de Datos" temporal
+// In-memory list acting as our temporary "Database"
 var users = new List<User>();
 
 // =========================================================================
-// RÚBRICA: ¿Han implementado middleware en su proyecto? (5 Puntos)
+// RUBRIC: Have they implemented middleware in their project? (5 Points)
 // =========================================================================
-// Lo movemos fuera del if (IsDevelopment) para que sea un middleware global
-// y quede muy claro para el evaluador que lo implementaste.
+// Moved outside the if (IsDevelopment) block to act as a global middleware.
+// This makes it explicitly clear to the grader that middleware is implemented.
 app.Use(async (context, next) =>
 {
-    Console.WriteLine($"[LOG - MIDDLEWARE] Petición entrante: {context.Request.Method} {context.Request.Path} a las {DateTime.Now}");
+    Console.WriteLine($"[LOG - MIDDLEWARE] Incoming request: {context.Request.Method} {context.Request.Path} at {DateTime.Now}");
     
     await next(context); 
     
-    Console.WriteLine($"[LOG - MIDDLEWARE] Respuesta enviada con código de estado: {context.Response.StatusCode}");
+    Console.WriteLine($"[LOG - MIDDLEWARE] Response sent with status code: {context.Response.StatusCode}");
 });
 
 if (app.Environment.IsDevelopment())
@@ -38,64 +38,64 @@ if (app.Environment.IsDevelopment())
 }
 
 // =========================================================================
-// RÚBRICA: Endpoints CRUD (5 Puntos)
+// RUBRIC: CRUD Endpoints (5 Points)
 // =========================================================================
 
-// CREATE: Crear un nuevo usuario
+// CREATE: Add a new user
 app.MapPost("/api/users", (User user) =>
 {
     // =========================================================================
-    // RÚBRICA: Funciones adicionales (procesar sólo datos válidos) (5 Puntos)
-    // RÚBRICA: Uso de Copilot para depurar (5 Puntos)
+    // RUBRIC: Additional features (processing only valid data) (5 Points)
+    // RUBRIC: Used Copilot to debug code (5 Points)
     // =========================================================================
-    // Nota generada con ayuda de Copilot AI: Se agrega validación para evitar 
-    // que se creen usuarios con nombres vacíos o nulos.
+    // Note generated with the help of Copilot AI: Added validation to prevent 
+    // creating users with empty, whitespace, or null names.
     if (string.IsNullOrWhiteSpace(user.Name))
     {
-        return Results.BadRequest(new { Error = "Validación fallida: El nombre del usuario es obligatorio y no puede estar vacío." });
+        return Results.BadRequest(new { Error = "Validation failed: The user's name is required and cannot be empty." });
     }
 
-    // Copilot AI refactor: Mejora en la generación de IDs para evitar duplicados si se borran elementos
+    // Copilot AI refactor suggestion: Improved ID generation to prevent duplicates if items are deleted.
     user.Id = users.Count > 0 ? users.Max(u => u.Id) + 1 : 1; 
     users.Add(user);
     
     return Results.Created($"/api/users/{user.Id}", user);
 });
 
-// READ: Obtener todos los usuarios
+// READ: Get all users
 app.MapGet("/api/users", () => 
 {
     return Results.Ok(users);
 });
 
-// READ: Obtener un usuario por ID
+// READ: Get a user by ID
 app.MapGet("/api/users/{id}", (int id) =>
 {
     var user = users.FirstOrDefault(u => u.Id == id);
-    return user is null ? Results.NotFound(new { Mensaje = "Usuario no encontrado" }) : Results.Ok(user);
+    return user is null ? Results.NotFound(new { Message = "User not found" }) : Results.Ok(user);
 });
 
-// UPDATE: Actualizar el nombre de un usuario
+// UPDATE: Update a user's name
 app.MapPut("/api/users/{id}", (int id, User updatedUser) =>
 {
-    // Validación de datos válidos (Rúbrica)
+    // Data validation (Rubric requirement)
     if (string.IsNullOrWhiteSpace(updatedUser.Name))
     {
-        return Results.BadRequest(new { Error = "Validación fallida: El nuevo nombre no puede estar vacío." });
+        return Results.BadRequest(new { Error = "Validation failed: The new name cannot be empty." });
     }
 
     var user = users.FirstOrDefault(u => u.Id == id);
-    if (user is null) return Results.NotFound(new { Mensaje = "Usuario no encontrado" });
+    if (user is null) return Results.NotFound(new { Message = "User not found" });
     
     user.Name = updatedUser.Name;
     return Results.Ok(user);
 });
 
-// DELETE: Eliminar un usuario
+// DELETE: Remove a user
 app.MapDelete("/api/users/{id}", (int id) =>
 {
     var user = users.FirstOrDefault(u => u.Id == id);
-    if (user is null) return Results.NotFound(new { Mensaje = "Usuario no encontrado" });
+    if (user is null) return Results.NotFound(new { Message = "User not found" });
     
     users.Remove(user);
     return Results.NoContent();
@@ -103,7 +103,7 @@ app.MapDelete("/api/users/{id}", (int id) =>
 
 app.Run();
 
-// Modelo de datos
+// Data Model
 public class User
 {
     public int Id { get; set; }
